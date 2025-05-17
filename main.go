@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Yarik7610/expressive.git/lexer"
+	"github.com/Yarik7610/expressive/lexer"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/Yarik7610/expressive.git
+module github.com/Yarik7610/expressive
 
 go 1.24.2
 
