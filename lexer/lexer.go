@@ -82,10 +82,20 @@ func (l *Lexer) number() Token {
 
 	expCount := 0
 	dotCount := 0
+	exponentNotation := false
 
-	for (l.cur >= '0' && l.cur <= '9') || l.cur == 'e' || l.cur == '_' || l.cur == '.' {
+	for (l.cur >= '0' && l.cur <= '9') || l.cur == 'e' || l.cur == '_' || l.cur == '.' || exponentNotation {
+		if exponentNotation {
+			if l.cur >= '0' && l.cur <= '9' {
+				exponentNotation = false
+			} else if l.cur != '+' && l.cur != '-' {
+				panic("lexer: exponent notation has wrong format")
+			}
+		}
+
 		if l.cur == 'e' {
 			expCount++
+			exponentNotation = true
 		} else if l.cur == '.' {
 			dotCount++
 		}

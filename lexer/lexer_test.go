@@ -53,8 +53,18 @@ func TestLexer(t *testing.T) {
 		},
 		{
 			Name: "number with e",
-			In:   "123e.2",
-			Out:  []Token{{TOKEN_NUMBER, "123e.2"}, {TOKEN_EOF, "TOKEN_EOF"}},
+			In:   "123e2",
+			Out:  []Token{{TOKEN_NUMBER, "123e2"}, {TOKEN_EOF, "TOKEN_EOF"}},
+		},
+		{
+			Name: "number with e and +",
+			In:   "123e+2",
+			Out:  []Token{{TOKEN_NUMBER, "123e+2"}, {TOKEN_EOF, "TOKEN_EOF"}},
+		},
+		{
+			Name: "number with e and -",
+			In:   "123e-2",
+			Out:  []Token{{TOKEN_NUMBER, "123e-2"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
 		{
 			Name: "number with . at the start",
@@ -91,6 +101,18 @@ func TestLexer(t *testing.T) {
 		{
 			Name: "number with e at the end",
 			In:   "123e",
+		},
+		{
+			Name: "number with e and no digits",
+			In:   "123e.-2",
+		},
+		{
+			Name: "number with e, + and no digits",
+			In:   "123e+.2",
+		},
+		{
+			Name: "number with e, - and no digits",
+			In:   "123e-.2",
 		},
 		{
 			Name: "number with many e",
