@@ -73,6 +73,10 @@ func TestLexer(t *testing.T) {
 		In   string
 	}{
 		{
+			Name: "expression with alphabet chars",
+			In:   "df+123",
+		},
+		{
 			Name: "number with underscore at the start",
 			In:   "_123",
 		},
