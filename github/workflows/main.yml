@@ -1,0 +1,30 @@
+name: Main workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
+        with:
+          go-version: 1.24
+
+      - name: Build app
+        run: go build ./...
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
+        with:
+          go-version: 1.24
+
+      - name: Test app
+        run: go test ./... -v

@@ -55,7 +55,7 @@ func (l *Lexer) Lex() []Token {
 		}
 
 		if tokenType == TOKEN_UNKNOWN {
-			panic(fmt.Sprintf("lexer detected unknown token: %q", l.cur))
+			panic(fmt.Sprintf("lexer: detected unknown token: %q", l.cur))
 		}
 
 		tokens = append(tokens, Token{tokenType, string(l.cur)})
