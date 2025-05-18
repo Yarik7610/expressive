@@ -123,7 +123,7 @@ func (p *Parser) previous() lexer.Token {
 }
 
 func (p *Parser) isEnd() bool {
-	return p.peek().Type == lexer.TOKEN_EOF
+	return p.pos == len(p.tokens) || p.peek().Type == lexer.TOKEN_EOF
 }
 
 func PrintNodes(nodes []Node) {
