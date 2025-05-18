@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Yarik7610/expressive/lexer"
+	"github.com/Yarik7610/expressive/parser"
 )
 
 func main() {
@@ -14,7 +15,10 @@ func main() {
 	input := os.Args[1]
 
 	l := lexer.NewLexer(strings.NewReader(input))
-
 	tokens := l.Lex()
 	lexer.PrintTokens(tokens)
+
+	p := parser.NewParser(tokens)
+	nodes := p.Parse()
+	parser.PrintNodes(nodes)
 }
