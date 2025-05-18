@@ -80,7 +80,7 @@ func (p *Parser) parsePrimary() Node {
 		return node
 	}
 
-	panic("parser: expected number or expression")
+	panic("parser: expected number or expression or '('")
 }
 
 func (p *Parser) match(tokenTypes ...int) bool {

@@ -129,7 +129,7 @@ func TestParser(t *testing.T) {
 			},
 		},
 		{
-			Name: "unclosed bracket",
+			Name: "no closing bracket",
 			In: []lexer.Token{
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: "("},
 				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
@@ -137,6 +137,15 @@ func TestParser(t *testing.T) {
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: "("},
 				{Type: lexer.TOKEN_NUMBER, Raw: "1"},
 				{Type: lexer.TOKEN_BRACE_RIGHT, Raw: ")"},
+				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
+			},
+		},
+		{
+			Name: "no opening bracket",
+			In: []lexer.Token{
+				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_PLUS, Raw: "+"},
+				{Type: lexer.TOKEN_BRACE_LEFT, Raw: ")"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 		},
