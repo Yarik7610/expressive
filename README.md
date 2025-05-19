@@ -45,9 +45,9 @@ You can write comments in input string, they start with `#` and nust be ended wi
 
 ```test.txt
 # Comment (must end with '\n')
-5%2.5 (end expresssions with '\n' too)
+5%2.5
 (2-3) ^ 2
-1_000 - 7
+1_000   -   7
 2*3+1
 ```
 
