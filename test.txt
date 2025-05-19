@@ -1,2 +1,5 @@
-#Comment example
+# Comment (must end with '\n')
 5%2.5
+(2-3) ^ 2
+1_000 - 7
+2*3+1
