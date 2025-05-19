@@ -84,30 +84,39 @@ func (l *Lexer) advance() {
 func (l *Lexer) number() Token {
 	var b bytes.Buffer
 
-	expCount := 0
 	dotCount := 0
 	exponentNotation := false
+	var prevCh rune
 
-	for (l.cur >= '0' && l.cur <= '9') || l.cur == 'e' || l.cur == '_' || l.cur == '.' || exponentNotation {
+	for (l.cur >= '0' && l.cur <= '9') || l.cur == 'e' || l.cur == '_' || l.cur == '.' || l.cur == '+' || l.cur == '-' {
+		if prevCh == l.cur && (l.cur == 'e' || l.cur == '_' || l.cur == '.') {
+			panic(fmt.Sprintf("lexer: detected adjacent %q", l.cur))
+		}
+
 		if exponentNotation {
-			if l.cur >= '0' && l.cur <= '9' {
-				exponentNotation = false
-			} else if l.cur != '+' && l.cur != '-' {
-				panic("lexer: exponent notation has wrong format")
+			if prevCh == 'e' && (l.cur == '.' || l.cur == '_') {
+				panic(fmt.Sprintf("lexer: exponent notation has wrong format: %q detected after 'e'", l.cur))
+			}
+			if prevCh != 'e' && (l.cur == '.' || l.cur == '+' || l.cur == '-') {
+				panic(fmt.Sprintf("lexer: exponent notation has wrong format: detected %q in power", l.cur))
+			}
+		} else {
+			if l.cur == '+' || l.cur == '-' {
+				panic(fmt.Sprintf("lexer: %q detected outside of exponent notation", l.cur))
 			}
 		}
 
 		if l.cur == 'e' {
-			expCount++
 			exponentNotation = true
 		} else if l.cur == '.' {
 			dotCount++
 		}
-		if expCount > 1 || dotCount > 1 {
+		if dotCount > 1 {
 			panic(fmt.Sprintf("lexer: %q was detected in number more than once", l.cur))
 		}
 
 		b.WriteRune(l.cur)
+		prevCh = l.cur
 		l.advance()
 	}
 

@@ -54,17 +54,17 @@ func TestLexer(t *testing.T) {
 			Out:  []Token{{TOKEN_NUMBER, "123_000"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
 		{
-			Name: "number with e",
-			In:   "123e2.2",
-			Out:  []Token{{TOKEN_NUMBER, "123e2.2"}, {TOKEN_EOF, "TOKEN_EOF"}},
+			Name: "number with e and underscore in power",
+			In:   "123e2_0",
+			Out:  []Token{{TOKEN_NUMBER, "123e2_0"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
 		{
-			Name: "number with e and +",
+			Name: "number with e and next '+'",
 			In:   "123e+2",
 			Out:  []Token{{TOKEN_NUMBER, "123e+2"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
 		{
-			Name: "number with e and -",
+			Name: "number with e and next '-'",
 			In:   "123e-2",
 			Out:  []Token{{TOKEN_NUMBER, "123e-2"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
@@ -109,20 +109,44 @@ func TestLexer(t *testing.T) {
 			In:   "123e.-2",
 		},
 		{
-			Name: "number with e, + and no digits",
+			Name: "number with e, '+' after and no digits",
 			In:   "123e+.2",
 		},
 		{
-			Name: "number with e, - and no digits",
+			Name: "number with e, '-' after and no digits",
 			In:   "123e-.2",
 		},
 		{
-			Name: "number with many e",
-			In:   "12e3ee2",
+			Name: "number with e and '+' in wrong place",
+			In:   "123e2+3",
 		},
 		{
-			Name: "number with many .",
-			In:   ".5...",
+			Name: "number with e and '-' in wrong place",
+			In:   "123e23-",
+		},
+		{
+			Name: "number with many e",
+			In:   "12e3e2e",
+		},
+		{
+			Name: "number with e and float power",
+			In:   "123e2.2",
+		},
+		{
+			Name: "number with many '.'",
+			In:   ".52.3.",
+		},
+		{
+			Name: "number with many adjacent '_'",
+			In:   "5e2__0",
+		},
+		{
+			Name: "number with many adjacent 'e'",
+			In:   "5ee20",
+		},
+		{
+			Name: "number with many adjacent 'e'",
+			In:   "5..",
 		},
 	}
 

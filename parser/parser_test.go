@@ -91,16 +91,16 @@ func TestParser(t *testing.T) {
 		{
 			Name: "division",
 			In: []lexer.Token{
-				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
 				{Type: lexer.TOKEN_SLASH, Raw: "/"},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-3e5"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "3e5"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 			Out: []Node{
 				&BinaryNode{
 					Token: lexer.Token{Type: lexer.TOKEN_SLASH, Raw: "/"},
-					Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-2"}},
-					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-3e5"}},
+					Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "2"}},
+					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3e5"}},
 				},
 			},
 		},
@@ -127,7 +127,7 @@ func TestParser(t *testing.T) {
 				{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
 				{Type: lexer.TOKEN_NUMBER, Raw: "4.2"},
 				{Type: lexer.TOKEN_CARET, Raw: "^"},
-				{Type: lexer.TOKEN_NUMBER, Raw: "3e1.1"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "3e1"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 			Out: []Node{
@@ -137,7 +137,7 @@ func TestParser(t *testing.T) {
 					Right: &BinaryNode{
 						Token: lexer.Token{Type: lexer.TOKEN_CARET, Raw: "^"},
 						Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "4.2"}},
-						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3e1.1"}},
+						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3e1"}},
 					},
 				},
 			},
@@ -186,7 +186,7 @@ func TestParser(t *testing.T) {
 			Name: "no closing bracket",
 			In: []lexer.Token{
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: "("},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
 				{Type: lexer.TOKEN_PLUS, Raw: "+"},
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: "("},
 				{Type: lexer.TOKEN_NUMBER, Raw: "1"},
@@ -197,7 +197,7 @@ func TestParser(t *testing.T) {
 		{
 			Name: "no opening bracket",
 			In: []lexer.Token{
-				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
 				{Type: lexer.TOKEN_PLUS, Raw: "+"},
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: ")"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
