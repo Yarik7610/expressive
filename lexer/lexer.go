@@ -43,6 +43,10 @@ func (l *Lexer) Lex() []Token {
 			tokenType = TOKEN_SLASH
 		case '*':
 			tokenType = TOKEN_ASTERISK
+		case '%':
+			tokenType = TOKEN_PERCENT
+		case '^':
+			tokenType = TOKEN_CARET
 		case '(':
 			tokenType = TOKEN_BRACE_LEFT
 		case ')':

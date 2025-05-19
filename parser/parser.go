@@ -9,7 +9,8 @@ import (
 // EBNF grammar:
 // <expr> ::= <term>
 // <term> ::= <factor> (("+" | "-") <factor>)*
-// <factor> ::= <unary> (("*" | "/") <unary>)*
+// <factor> ::= <power> (("*" | "/" | "%") <power>)*
+// <power> ::= <unary> (^ <unary>)*
 // <unary> ::= "-"? <unary> | <primary>
 // <primary> ::= NUMBER | "(" <expr> ")"
 
@@ -50,9 +51,21 @@ func (p *Parser) parseTerm() Node {
 }
 
 func (p *Parser) parseFactor() Node {
+	lhs := p.parsePower()
+
+	for p.match(lexer.TOKEN_ASTERISK, lexer.TOKEN_SLASH, lexer.TOKEN_PERCENT) {
+		op := p.previous()
+		rhs := p.parsePower()
+		lhs = &BinaryNode{Token: op, Left: lhs, Right: rhs}
+	}
+
+	return lhs
+}
+
+func (p *Parser) parsePower() Node {
 	lhs := p.parseUnary()
 
-	for p.match(lexer.TOKEN_ASTERISK, lexer.TOKEN_SLASH) {
+	for p.match(lexer.TOKEN_CARET) {
 		op := p.previous()
 		rhs := p.parseUnary()
 		lhs = &BinaryNode{Token: op, Left: lhs, Right: rhs}

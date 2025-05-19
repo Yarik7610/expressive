@@ -38,26 +38,33 @@ func TestParser(t *testing.T) {
 			Name: "substraction and unary '-'",
 			In: []lexer.Token{
 				{Type: lexer.TOKEN_NUMBER, Raw: ".1"},
-				{Type: lexer.TOKEN_PLUS, Raw: "-"},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-.3"},
+				{Type: lexer.TOKEN_MINUS, Raw: "-"},
+				{Type: lexer.TOKEN_MINUS, Raw: "-"},
+				{Type: lexer.TOKEN_NUMBER, Raw: ".3"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 			Out: []Node{
 				&BinaryNode{
-					Token: lexer.Token{Type: lexer.TOKEN_PLUS, Raw: "-"},
+					Token: lexer.Token{Type: lexer.TOKEN_MINUS, Raw: "-"},
 					Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: ".1"}},
-					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-.3"}},
+					Right: &UnaryNode{
+						Token: lexer.Token{Type: lexer.TOKEN_MINUS, Raw: "-"},
+						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: ".3"}},
+					},
 				},
 			},
 		},
 		{
 			Name: "multiplication and substraction",
 			In: []lexer.Token{
-				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_MINUS, Raw: "-"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
 				{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-3"},
+				{Type: lexer.TOKEN_MINUS, Raw: "-"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "3"},
 				{Type: lexer.TOKEN_PLUS, Raw: "+"},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-4.2"},
+				{Type: lexer.TOKEN_MINUS, Raw: "-"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "4.2"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 			Out: []Node{
@@ -65,10 +72,19 @@ func TestParser(t *testing.T) {
 					Token: lexer.Token{Type: lexer.TOKEN_PLUS, Raw: "+"},
 					Left: &BinaryNode{
 						Token: lexer.Token{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
-						Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-2"}},
-						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-3"}},
+						Left: &UnaryNode{
+							Token: lexer.Token{Type: lexer.TOKEN_MINUS, Raw: "-"},
+							Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "2"}},
+						},
+						Right: &UnaryNode{
+							Token: lexer.Token{Type: lexer.TOKEN_MINUS, Raw: "-"},
+							Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3"}},
+						},
 					},
-					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-4.2"}},
+					Right: &UnaryNode{
+						Token: lexer.Token{Type: lexer.TOKEN_MINUS, Raw: "-"},
+						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "4.2"}},
+					},
 				},
 			},
 		},
@@ -89,10 +105,48 @@ func TestParser(t *testing.T) {
 			},
 		},
 		{
+			Name: "modulo",
+			In: []lexer.Token{
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
+				{Type: lexer.TOKEN_PERCENT, Raw: "%"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "3e5"},
+				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
+			},
+			Out: []Node{
+				&BinaryNode{
+					Token: lexer.Token{Type: lexer.TOKEN_PERCENT, Raw: "%"},
+					Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "2"}},
+					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3e5"}},
+				},
+			},
+		},
+		{
+			Name: "pow and multiplication",
+			In: []lexer.Token{
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
+				{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "4.2"},
+				{Type: lexer.TOKEN_CARET, Raw: "^"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "3e1.1"},
+				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
+			},
+			Out: []Node{
+				&BinaryNode{
+					Token: lexer.Token{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
+					Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "2"}},
+					Right: &BinaryNode{
+						Token: lexer.Token{Type: lexer.TOKEN_CARET, Raw: "^"},
+						Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "4.2"}},
+						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "3e1.1"}},
+					},
+				},
+			},
+		},
+		{
 			Name: "brackets",
 			In: []lexer.Token{
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: "("},
-				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
+				{Type: lexer.TOKEN_NUMBER, Raw: "2"},
 				{Type: lexer.TOKEN_PLUS, Raw: "+"},
 				{Type: lexer.TOKEN_NUMBER, Raw: "1"},
 				{Type: lexer.TOKEN_BRACE_RIGHT, Raw: ")"},
@@ -105,7 +159,7 @@ func TestParser(t *testing.T) {
 					Token: lexer.Token{Type: lexer.TOKEN_ASTERISK, Raw: "*"},
 					Left: &BinaryNode{
 						Token: lexer.Token{Type: lexer.TOKEN_PLUS, Raw: "+"},
-						Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "-2"}},
+						Left:  &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "2"}},
 						Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "1"}},
 					},
 					Right: &NumberNode{Token: lexer.Token{Type: lexer.TOKEN_NUMBER, Raw: "4"}},
@@ -146,6 +200,14 @@ func TestParser(t *testing.T) {
 				{Type: lexer.TOKEN_NUMBER, Raw: "-2"},
 				{Type: lexer.TOKEN_PLUS, Raw: "+"},
 				{Type: lexer.TOKEN_BRACE_LEFT, Raw: ")"},
+				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
+			},
+		},
+		{
+			Name: "no second operand",
+			In: []lexer.Token{
+				{Type: lexer.TOKEN_NUMBER, Raw: ".1"},
+				{Type: lexer.TOKEN_MINUS, Raw: "^"},
 				{Type: lexer.TOKEN_EOF, Raw: "TOKEN_EOF"},
 			},
 		},

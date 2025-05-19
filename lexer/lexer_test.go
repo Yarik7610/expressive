@@ -30,12 +30,14 @@ func TestLexer(t *testing.T) {
 		},
 		{
 			Name: "operator and separator tokens lex",
-			In:   "+-/*()",
+			In:   "+-/*^%()",
 			Out: []Token{
 				{TOKEN_PLUS, "+"},
 				{TOKEN_MINUS, "-"},
 				{TOKEN_SLASH, "/"},
 				{TOKEN_ASTERISK, "*"},
+				{TOKEN_CARET, "^"},
+				{TOKEN_PERCENT, "%"},
 				{TOKEN_BRACE_LEFT, "("},
 				{TOKEN_BRACE_RIGHT, ")"},
 				{TOKEN_EOF, "TOKEN_EOF"},
@@ -53,8 +55,8 @@ func TestLexer(t *testing.T) {
 		},
 		{
 			Name: "number with e",
-			In:   "123e2",
-			Out:  []Token{{TOKEN_NUMBER, "123e2"}, {TOKEN_EOF, "TOKEN_EOF"}},
+			In:   "123e2.2",
+			Out:  []Token{{TOKEN_NUMBER, "123e2.2"}, {TOKEN_EOF, "TOKEN_EOF"}},
 		},
 		{
 			Name: "number with e and +",
