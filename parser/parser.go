@@ -10,7 +10,7 @@ import (
 // <expr> ::= <term>
 // <term> ::= <factor> (("+" | "-") <factor>)*
 // <factor> ::= <power> (("*" | "/" | "%") <power>)*
-// <power> ::= <unary> (^ <unary>)*
+// <power> ::= <unary> ("^" <unary>)*
 // <unary> ::= "-"? <unary> | <primary>
 // <primary> ::= NUMBER | "(" <expr> ")"
 

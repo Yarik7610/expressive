@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -16,9 +17,9 @@ func main() {
 
 	l := lexer.NewLexer(strings.NewReader(input))
 	tokens := l.Lex()
-	lexer.PrintTokens(tokens)
 
 	p := parser.NewParser(tokens)
 	nodes := p.Parse()
-	parser.PrintNodes(nodes)
+
+	fmt.Println(parser.Eval(nodes))
 }
