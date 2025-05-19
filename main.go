@@ -17,6 +17,7 @@ func main() {
 
 	l := lexer.NewLexer(strings.NewReader(input))
 	tokens := l.Lex()
+	lexer.PrintTokens(tokens)
 
 	p := parser.NewParser(tokens)
 	nodes := p.Parse()

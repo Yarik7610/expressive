@@ -102,7 +102,7 @@ func (l *Lexer) number() Token {
 			}
 		} else {
 			if l.cur == '+' || l.cur == '-' {
-				panic(fmt.Sprintf("lexer: %q detected outside of exponent notation", l.cur))
+				break
 			}
 		}
 
